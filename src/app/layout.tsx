@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 
 import { Inter as FontSans } from "next/font/google";
+import Header from "./header";
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -27,6 +28,7 @@ export default function RootLayout({
           fontSans.variable,
         )}
       >
+        <Header />
         {children}
       </body>
     </html>
