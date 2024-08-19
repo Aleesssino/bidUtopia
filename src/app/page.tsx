@@ -2,9 +2,7 @@ import { database } from "@/db/database";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { revalidatePath } from "next/cache";
-import SignIn from "@/components/sign-in";
 import { auth } from "@/auth";
-import { SignOut } from "@/components/sign-out";
 import { items } from "@/db/schema";
 
 export default async function Home() {
@@ -15,26 +13,35 @@ export default async function Home() {
   // if (!user) return null;
 
   return (
-    <main className="container mx-auto py-12">
-      {session ? <SignOut /> : <SignIn />}
-      <form
-        action={async (formData: FormData) => {
-          "use server";
-          await database.insert(items).values({
-            name: formData.get("name") as string,
-            userId: session?.user?.id!, // Using the non-nullable user ID
-          });
-          revalidatePath("/");
-        }}
-      >
-        <Input name="name" placeholder="Your Item" />{" "}
-        {/* Fixed the input name attribute */}
-        <Button type="submit">Post Item</Button> {/* Capitalized button text */}
-      </form>
+    <main className="container mx-auto py-12 space-y-8">
+      <h1 className="font-bold text-4xl">Itmes for sale</h1>
+      {/* <form */}
+      {/*   className="p-4 border rounded-lg space-y-4 max-w-lg flex flex-col" */}
+      {/*   action={async (formData: FormData) => { */}
+      {/*     "use server"; */}
+      {/*     await database.insert(items).values({ */}
+      {/*       name: formData.get("name") as string, */}
+      {/*       userId: session?.user?.id!, // Using the non-nullable user ID */}
+      {/*     }); */}
+      {/*     revalidatePath("/"); */}
+      {/*   }} */}
+      {/* > */}
+      {/*   <Input name="name" placeholder="Your Item" className="" />{" "} */}
+      {/*   {/* Fixed the input name attribute */}
+      {/*   <Button type="submit" className="self-end"> */}
+      {/*     Post Item */}
+      {/*   </Button> */}
+      {/*   {/* Capitalized button text */}
+      {/* </form> */}
 
-      {allItems.map((item) => (
-        <div key={item.id}>{item.name}</div>
-      ))}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+        {allItems.map((item) => (
+          <div key={item.id} className="border p-4 sm:p-6 md:p-8 rounded-2xl">
+            {item.name}
+            starting price: {item.startingPrice / 100},-
+          </div>
+        ))}
+      </div>
     </main>
   );
 }
